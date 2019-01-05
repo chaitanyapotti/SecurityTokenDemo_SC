@@ -4,11 +4,13 @@ const fs = require("fs");
 
 const Network = artifacts.require("./KyberNetwork.sol");
 const ConversionRates = artifacts.require("./ConversionRates.sol");
-// const SanityRates = artifacts.require("./SanityRates.sol");
-const PollFactory = artifacts.require("./PollFactory.sol");
+const SanityRates = artifacts.require("./SanityRates.sol");
+const Reserve = artifacts.require("./KyberReserve.sol");
 
-const KNC = artifacts.require("./KyberNetworkCrystal.sol");
-const DAI = artifacts.require("./Dai.sol");
+const KNC = artifacts.require("./mockTokens/KyberNetworkCrystal.sol");
+const OMG = artifacts.require("./mockTokens/OmiseGo.sol");
+const SALT = artifacts.require("./mockTokens/Salt.sol");
+const ZIL = artifacts.require("./mockTokens/Zilliqa.sol");
 
 const tokenConfig = JSON.parse(fs.readFileSync("../config/tokens.json", "utf8"));
 
@@ -30,19 +32,19 @@ module.exports = async (deployer, network, accounts) => {
 
   // Set the instances
   const NetworkInstance = await Network.at(Network.address);
-  const PollFactoryInstance = await PollFactory.at(PollFactory.address);
+  const ReserveInstance = await Reserve.at(Reserve.address);
 
   // Set the reserve contract addresses
-  tx(await PollFactoryInstance.setContracts(Network.address, ConversionRates.address, 0), "setContracts()");
+  tx(await ReserveInstance.setContracts(Network.address, ConversionRates.address, SanityRates.address), "setContracts()");
 
   // Add reserve to network
-  tx(await NetworkInstance.addReserve(PollFactoryInstance.address, true), "addReserve()");
+  tx(await NetworkInstance.addReserve(Reserve.address, true), "addReserve()");
 
   Object.keys(tokenConfig.Reserve).forEach(async key => {
     // Add the withdrawal address for each token
-    // tx(await PollFactoryInstance.approveWithdrawAddress(eval(key).address, reserveWallet, true), "approveWithdrawAddress()");
+    tx(await ReserveInstance.approveWithdrawAddress(eval(key).address, reserveWallet, true), "approveWithdrawAddress()");
 
     // List token pairs for the reserve
-    tx(await NetworkInstance.listPairForReserve(PollFactoryInstance.address, eval(key).address, true, true, true), "listPairForReserve()");
+    tx(await NetworkInstance.listPairForReserve(Reserve.address, eval(key).address, true, true, true), "listPairForReserve()");
   });
 };

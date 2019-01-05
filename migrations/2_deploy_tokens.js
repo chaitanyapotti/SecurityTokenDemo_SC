@@ -1,13 +1,17 @@
 /* global artifacts */
-const Dai = artifacts.require("./Dai.sol");
-const DaicoToken = artifacts.require("./DaicoToken.sol");
-const KNC = artifacts.require("./KyberNetworkCrystal.sol");
-const KGT = artifacts.require("./KyberGenesisToken.sol");
+const KNC = artifacts.require("./mockTokens/KyberNetworkCrystal.sol");
+const KGT = artifacts.require("./mockTokens/KyberGenesisToken.sol");
+const OMG = artifacts.require("./mockTokens/OmiseGo.sol");
+const SALT = artifacts.require("./mockTokens/Salt.sol");
+const ZIL = artifacts.require("./mockTokens/Zilliqa.sol");
+const MANA = artifacts.require("./mockTokens/Mana.sol");
 
 module.exports = async deployer => {
   // Deploy the tokens
-  await deployer.deploy(Dai, "DAI", "DAI", 18);
-  await deployer.deploy(DaicoToken, "DAICO", "DAICO", "1000000000000000000000000000", "50");
-  await deployer.deploy(KNC, "KNC", "Kyber Network Crystal", 18);
-  await deployer.deploy(KGT, "KGT", "Kyber Genesis Token", 0);
+  await deployer.deploy(KNC);
+  await deployer.deploy(KGT);
+  await deployer.deploy(OMG);
+  await deployer.deploy(SALT);
+  await deployer.deploy(ZIL);
+  await deployer.deploy(MANA);
 };

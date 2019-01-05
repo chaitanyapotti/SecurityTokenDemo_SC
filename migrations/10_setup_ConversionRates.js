@@ -4,10 +4,12 @@ const BN = require("bn.js");
 const fs = require("fs");
 
 const ConversionRates = artifacts.require("./ConversionRates.sol");
-const PollFactory = artifacts.require("./PollFactory.sol");
+const Reserve = artifacts.require("./KyberReserve.sol");
 
-const KNC = artifacts.require("./KyberNetworkCrystal.sol");
-const DAI = artifacts.require("./Dai.sol");
+const KNC = artifacts.require("./mockTokens/KyberNetworkCrystal.sol");
+const OMG = artifacts.require("./mockTokens/OmiseGo.sol");
+const SALT = artifacts.require("./mockTokens/Salt.sol");
+const ZIL = artifacts.require("./mockTokens/Zilliqa.sol");
 
 const networkConfig = JSON.parse(fs.readFileSync("../config/network.json", "utf8"));
 const tokenConfig = JSON.parse(fs.readFileSync("../config/tokens.json", "utf8"));
@@ -28,7 +30,7 @@ function tx(result, call) {
 }
 
 module.exports = async (deployer, network, accounts) => {
-  const operator = accounts[0];
+  const operator = accounts[1];
   const baseBuy = [];
   const baseSell = [];
   const bytes14 = [];
@@ -40,6 +42,7 @@ module.exports = async (deployer, network, accounts) => {
   Object.keys(tokenConfig.Reserve).forEach(async key => {
     // Setup tokenAddresses array for baseBuy and baseSell
     tokenAddresses.push(eval(key).address);
+
     // Add the token
     tx(await ConversionRatesInstance.addToken(eval(key).address), "addToken()");
 
@@ -58,7 +61,6 @@ module.exports = async (deployer, network, accounts) => {
     tx(await ConversionRatesInstance.setQtyStepFunction(eval(key).address, [0], [0], [0], [0], { from: operator }), "setQtyStepFunction()");
 
     // Set the imbalance step function for each token
-
     tx(
       await ConversionRatesInstance.setImbalanceStepFunction(eval(key).address, [0], [0], [0], [0], { from: operator }),
       "setImbalanceStepFunction()"
@@ -73,17 +75,18 @@ module.exports = async (deployer, network, accounts) => {
 
   // Set the KyberReserve address and use the txReceipt to get the latest block number
   // for setting the baseRate
-  const blockNumber = tx(await ConversionRatesInstance.setReserveAddress(PollFactory.address), "setReserveAddress()");
+  const blockNumber = tx(await ConversionRatesInstance.setReserveAddress(Reserve.address), "setReserveAddress()");
+
   // Setup baseBuy and baseSell for setting the baseRate of the listed tokens
   Object.keys(tokenConfig.Reserve).forEach(key => {
-    console.log(key);
     baseBuy.push(networkConfig.ConversionRates[`${key}BaseBuy`]);
     baseSell.push(networkConfig.ConversionRates[`${key}BaseSell`]);
     bytes14.push(networkConfig.ConversionRates.bytes14);
   });
+
   // Set the base rate of each token
   tx(
-    await ConversionRatesInstance.setBaseRate(tokenAddresses, baseBuy, baseSell, bytes14, bytes14, blockNumber, [0, 0], { from: operator }),
+    await ConversionRatesInstance.setBaseRate(tokenAddresses, baseBuy, baseSell, bytes14, bytes14, blockNumber, [0, 0, 0, 0], { from: operator }),
     "setBaseRate()"
   );
 };

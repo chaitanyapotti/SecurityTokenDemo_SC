@@ -2,7 +2,7 @@
 /* eslint-disable no-unused-vars, no-eval */
 const fs = require("fs");
 
-const PollFactory = artifacts.require("./PollFactory.sol");
+const Reserve = artifacts.require("./KyberReserve.sol");
 const FeeBurner = artifacts.require("./FeeBurner.sol");
 
 const networkConfig = JSON.parse(fs.readFileSync("../config/network.json", "utf8"));
@@ -28,7 +28,7 @@ module.exports = async (deployer, network, accounts) => {
   const FeeBurnerInstance = await FeeBurner.at(FeeBurner.address);
 
   // Set the reserve data
-  tx(await FeeBurnerInstance.setReserveData(PollFactory.address, networkConfig.FeeBurner.reserveFees, reserveWallet), "setReserveData()");
+  tx(await FeeBurnerInstance.setReserveData(Reserve.address, networkConfig.FeeBurner.reserveFees, reserveWallet), "setReserveData()");
 
   // Set the burn fees, tax fees in base points, and tax wallet
   tx(await FeeBurnerInstance.setKNCRate(networkConfig.FeeBurner.kncRate), "setKNCRate()");
