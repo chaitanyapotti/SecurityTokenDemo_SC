@@ -40,7 +40,7 @@ contract KyberNetwork is Withdrawable, Utils2, KyberNetworkInterface {
     //  to verify Ethers will be received only from reserves if transferred without a specific function call.
     function() public payable {
         require(isReserve[msg.sender]);
-        EtherReceival(msg.sender, msg.value);
+        emit EtherReceival(msg.sender, msg.value);
     }
     /* solhint-enable no-complex-fallback */
 
@@ -101,7 +101,7 @@ contract KyberNetwork is Withdrawable, Utils2, KyberNetworkInterface {
             require(!isReserve[reserve]);
             reserves.push(reserve);
             isReserve[reserve] = true;
-            AddReserveToNetwork(reserve, true);
+            emit AddReserveToNetwork(reserve, true);
         } else {
             isReserve[reserve] = false;
             // will have trouble if more than 50k reserves...
@@ -109,7 +109,7 @@ contract KyberNetwork is Withdrawable, Utils2, KyberNetworkInterface {
                 if (reserves[i] == reserve) {
                     reserves[i] = reserves[reserves.length - 1];
                     reserves.length--;
-                    AddReserveToNetwork(reserve, false);
+                    emit AddReserveToNetwork(reserve, false);
                     break;
                 }
             }
@@ -133,7 +133,7 @@ contract KyberNetwork is Withdrawable, Utils2, KyberNetworkInterface {
         if (ethToToken) {
             listPairs(reserve, token, false, add);
 
-            ListReservePairs(reserve, ETH_TOKEN_ADDRESS, token, add);
+            emit ListReservePairs(reserve, ETH_TOKEN_ADDRESS, token, add);
         }
 
         if (tokenToEth) {
@@ -144,7 +144,7 @@ contract KyberNetwork is Withdrawable, Utils2, KyberNetworkInterface {
                 token.approve(reserve, 0);
             }
 
-            ListReservePairs(reserve, token, ETH_TOKEN_ADDRESS, add);
+            emit ListReservePairs(reserve, token, ETH_TOKEN_ADDRESS, add);
         }
 
         setDecimals(token);
@@ -197,7 +197,7 @@ contract KyberNetwork is Withdrawable, Utils2, KyberNetworkInterface {
     function setKyberProxy(address networkProxy) public onlyAdmin {
         require(networkProxy != address(0));
         kyberNetworkProxyContract = networkProxy;
-        KyberProxySet(kyberNetworkProxyContract, msg.sender);
+        emit KyberProxySet(kyberNetworkProxyContract, msg.sender);
     }
 
     /// @dev returns number of reserves
@@ -313,7 +313,7 @@ contract KyberNetwork is Withdrawable, Utils2, KyberNetworkInterface {
             if (numRelevantReserves > 1) {
                 //when encountering small rate diff from bestRate. draw from relevant reserves
                 // solhint-disable-next-line
-                random = uint(block.blockhash(block.number-1)) % numRelevantReserves;
+                random = uint(blockhash(block.number-1)) % numRelevantReserves;
             }
 
             bestReserve = reserveCandidates[random];
@@ -435,7 +435,7 @@ contract KyberNetwork is Withdrawable, Utils2, KyberNetworkInterface {
         if (tradeInput.dest != ETH_TOKEN_ADDRESS)
             require(feeBurnerContract.handleFees(weiAmount, rateResult.reserve2, tradeInput.walletId));
 
-        KyberTrade(tradeInput.trader, tradeInput.src, actualSrcAmount, tradeInput.destAddress, tradeInput.dest,
+        emit KyberTrade(tradeInput.trader, tradeInput.src, actualSrcAmount, tradeInput.destAddress, tradeInput.dest,
             actualDestAmount);
 
         return actualDestAmount;

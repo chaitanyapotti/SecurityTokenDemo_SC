@@ -39,7 +39,7 @@ contract LiquidityConversionRates is ConversionRatesInterface, LiquidityFormula,
 
     function setReserveAddress(address reserve) public onlyAdmin {
         reserveContract = reserve;
-        ReserveAddressSet(reserve);
+        emit ReserveAddressSet(reserve);
     }
 
     event LiquidityParamsSet(
@@ -86,7 +86,7 @@ contract LiquidityConversionRates is ConversionRatesInterface, LiquidityFormula,
         maxSellRateInPrecision = _maxTokenToEthRateInPrecision;
         minSellRateInPrecision = _minTokenToEthRateInPrecision;
 
-        LiquidityParamsSet(
+        emit LiquidityParamsSet(
             rInFp,
             pMinInFp,
             numFpBits,
@@ -130,7 +130,7 @@ contract LiquidityConversionRates is ConversionRatesInterface, LiquidityFormula,
         uint resetFeesInTwei = collectedFeesInTwei;
         collectedFeesInTwei = 0;
 
-        CollectedFeesReset(resetFeesInTwei);
+        emit CollectedFeesReset(resetFeesInTwei);
     }
 
     function getRate(

@@ -31,6 +31,6 @@ contract SwapEtherToToken {
         require(token.transfer(destAddress, destAmount));
 
         // Log the event
-        Swap(msg.sender, token, destAmount);
+        emit Swap(msg.sender, token, destAmount);
     }
 }

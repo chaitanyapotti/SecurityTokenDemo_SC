@@ -45,6 +45,6 @@ contract SwapTokenToEther {
         destAddress.transfer(destAmount);
 
         // Log the event
-        Swap(msg.sender, token, destAmount);
+        emit Swap(msg.sender, token, destAmount);
     }
 }

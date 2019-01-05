@@ -43,6 +43,6 @@ contract SwapTokenToToken {
         require(destToken.transfer(destAddress, destAmount));
 
         // Log the event
-        Swap(msg.sender, srcToken, destToken, destAmount);
+        emit Swap(msg.sender, srcToken, destToken, destAmount);
     }
 }

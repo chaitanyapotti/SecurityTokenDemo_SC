@@ -194,7 +194,7 @@ contract KyberNetworkProxy is KyberNetworkProxyInterface, SimpleNetworkInterface
         require(tradeOutcome.userDeltaDestAmount <= maxDestAmount);
         require(tradeOutcome.actualRate >= minConversionRate);
 
-        ExecuteTrade(msg.sender, src, dest, tradeOutcome.userDeltaSrcAmount, tradeOutcome.userDeltaDestAmount);
+        emit ExecuteTrade(msg.sender, src, dest, tradeOutcome.userDeltaSrcAmount, tradeOutcome.userDeltaDestAmount);
         return tradeOutcome.userDeltaDestAmount;
     }
 
@@ -204,7 +204,7 @@ contract KyberNetworkProxy is KyberNetworkProxyInterface, SimpleNetworkInterface
 
         require(_kyberNetworkContract != address(0));
 
-        KyberNetworkSet(_kyberNetworkContract, kyberNetworkContract);
+        emit KyberNetworkSet(_kyberNetworkContract, kyberNetworkContract);
 
         kyberNetworkContract = _kyberNetworkContract;
     }

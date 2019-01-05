@@ -55,6 +55,6 @@ contract Trade {
         );
 
         // Log the event
-        Swap(msg.sender, srcToken, destToken);
+        emit Swap(msg.sender, srcToken, destToken);
     }
 }

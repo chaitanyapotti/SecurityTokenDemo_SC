@@ -25,7 +25,7 @@ contract ExpectedRate is Withdrawable, ExpectedRateInterface, Utils2 {
     function setQuantityFactor(uint newFactor) public onlyOperator {
         require(newFactor <= 100);
 
-        QuantityFactorSet(newFactor, quantityFactor, msg.sender);
+        emit QuantityFactorSet(newFactor, quantityFactor, msg.sender);
         quantityFactor = newFactor;
     }
 
@@ -34,7 +34,7 @@ contract ExpectedRate is Withdrawable, ExpectedRateInterface, Utils2 {
     function setWorstCaseRateFactor(uint bps) public onlyOperator {
         require(bps <= 100 * 100);
 
-        MinSlippageFactorSet(bps, worstCaseRateFactorInBps, msg.sender);
+        emit MinSlippageFactorSet(bps, worstCaseRateFactorInBps, msg.sender);
         worstCaseRateFactorInBps = bps;
     }
 
