@@ -9,7 +9,6 @@ const Reserve = artifacts.require("./KyberReserve.sol");
 const KNC = artifacts.require("./mockTokens/KyberNetworkCrystal.sol");
 const OMG = artifacts.require("./mockTokens/OmiseGo.sol");
 const SALT = artifacts.require("./mockTokens/Salt.sol");
-const ZIL = artifacts.require("./mockTokens/Zilliqa.sol");
 
 const networkConfig = JSON.parse(fs.readFileSync("../config/network.json", "utf8"));
 const tokenConfig = JSON.parse(fs.readFileSync("../config/tokens.json", "utf8"));
