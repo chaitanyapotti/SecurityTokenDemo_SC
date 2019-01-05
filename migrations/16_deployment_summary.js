@@ -10,7 +10,6 @@ const SanityRates = artifacts.require("./SanityRates.sol");
 const Reserve = artifacts.require("./KyberReserve.sol");
 const AutomatedReserve = artifacts.require("./KyberAutomatedReserve.sol");
 const FeeBurner = artifacts.require("./FeeBurner.sol");
-const WhiteList = artifacts.require("./WhiteList.sol");
 const ExpectedRate = artifacts.require("./ExpectedRate.sol");
 
 const SwapEtherToToken = artifacts.require("./examples/SwapEtherToToken.sol");
@@ -76,7 +75,6 @@ module.exports = (deployer, network, accounts) => {
   console.log(`(KyberReserve) ${Reserve.address}`);
   console.log(`(AutomatedKyberReserve) ${AutomatedReserve.address}`);
   console.log(`(FeeBurner) ${FeeBurner.address}`);
-  console.log(`(WhiteList) ${WhiteList.address}`);
   console.log(`(ExpectedRate) ${ExpectedRate.address}`);
   console.log(`(SwapEtherToToken) ${SwapEtherToToken.address}`);
   console.log(`(SwapTokenToEther) ${SwapTokenToEther.address}`);

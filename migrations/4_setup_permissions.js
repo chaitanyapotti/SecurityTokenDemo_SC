@@ -6,7 +6,6 @@ const SanityRates = artifacts.require("./SanityRates.sol");
 const Reserve = artifacts.require("./KyberReserve.sol");
 const AutomatedReserve = artifacts.require("./KyberAutomatedReserve.sol");
 const FeeBurner = artifacts.require("./FeeBurner.sol");
-const WhiteList = artifacts.require("./WhiteList.sol");
 const ExpectedRate = artifacts.require("./ExpectedRate.sol");
 
 function tx(result, call) {
@@ -33,7 +32,6 @@ module.exports = async (deployer, network, accounts) => {
   const ReserveInstance = await Reserve.at(Reserve.address);
   const AutomatedReserveInstance = await AutomatedReserve.at(AutomatedReserve.address);
   const FeeBurnerInstance = await FeeBurner.at(FeeBurner.address);
-  const WhiteListInstance = await WhiteList.at(WhiteList.address);
   const ExpectedRateInstance = await ExpectedRate.at(ExpectedRate.address);
 
   // Set permissions of contracts
@@ -44,7 +42,6 @@ module.exports = async (deployer, network, accounts) => {
   tx(await AutomatedReserveInstance.addOperator(operator), "addOperator()");
   tx(await AutomatedReserveInstance.addAlerter(alerter), "addAlerter()");
   tx(await FeeBurnerInstance.addOperator(operator), "addOperator()");
-  tx(await WhiteListInstance.addOperator(operator), "addOperator()");
   tx(await ExpectedRateInstance.addOperator(operator), "addOperator()");
   tx(await SanityRatesInstance.addOperator(operator), "addOperator()");
 };

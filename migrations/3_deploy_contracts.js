@@ -8,10 +8,8 @@ const SanityRates = artifacts.require("./SanityRates.sol");
 const Reserve = artifacts.require("./KyberReserve.sol");
 const AutomatedReserve = artifacts.require("./KyberAutomatedReserve.sol");
 const FeeBurner = artifacts.require("./FeeBurner.sol");
-const WhiteList = artifacts.require("./WhiteList.sol");
 const ExpectedRate = artifacts.require("./ExpectedRate.sol");
 const KNC = artifacts.require("./mockTokens/KyberNetworkCrystal.sol");
-const KGT = artifacts.require("./mockTokens/KyberGenesisToken.sol");
 const SwapEtherToToken = artifacts.require("./examples/SwapEtherToToken.sol");
 const SwapTokenToEther = artifacts.require("./examples/SwapTokenToEther.sol");
 const SwapTokenToToken = artifacts.require("./examples/SwapTokenToToken.sol");
@@ -30,7 +28,6 @@ module.exports = async (deployer, network, accounts) => {
   await deployer.deploy(Reserve, Network.address, ConversionRates.address, admin);
   await deployer.deploy(AutomatedReserve, Network.address, LiquidityConversionRates.address, admin);
   await deployer.deploy(FeeBurner, admin, KNC.address, Network.address);
-  await deployer.deploy(WhiteList, admin, KGT.address);
   await deployer.deploy(ExpectedRate, Network.address, admin);
 
   // Deploy the examples

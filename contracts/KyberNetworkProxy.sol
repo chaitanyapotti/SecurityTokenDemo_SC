@@ -216,14 +216,6 @@ contract KyberNetworkProxy is KyberNetworkProxyInterface, SimpleNetworkInterface
         return kyberNetworkContract.getExpectedRate(src, dest, srcQty);
     }
 
-    function getUserCapInWei(address user) public view returns(uint) {
-        return kyberNetworkContract.getUserCapInWei(user);
-    }
-
-    function getUserCapInTokenWei(address user, ERC20 token) public view returns(uint) {
-        return kyberNetworkContract.getUserCapInTokenWei(user, token);
-    }
-
     function maxGasPrice() public view returns(uint) {
         return kyberNetworkContract.maxGasPrice();
     }

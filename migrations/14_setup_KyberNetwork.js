@@ -6,7 +6,6 @@ const Network = artifacts.require("./KyberNetwork.sol");
 const NetworkProxy = artifacts.require("./KyberNetworkProxy.sol");
 const Reserve = artifacts.require("./KyberReserve.sol");
 const FeeBurner = artifacts.require("./FeeBurner.sol");
-const WhiteList = artifacts.require("./WhiteList.sol");
 const ExpectedRate = artifacts.require("./ExpectedRate.sol");
 
 const networkConfig = JSON.parse(fs.readFileSync("../config/network.json", "utf8"));
@@ -31,7 +30,6 @@ module.exports = async deployer => {
   // Setup the contract addresses of the network
   tx(await NetworkInstance.setKyberProxy(NetworkProxy.address), "setKyberProxy()");
   tx(await NetworkInstance.setFeeBurner(FeeBurner.address), "setFeeBurner()");
-  tx(await NetworkInstance.setWhiteList(WhiteList.address), "setWhiteList");
   tx(await NetworkInstance.setExpectedRate(ExpectedRate.address), "setExpectedRate");
 
   // Setup network parameters

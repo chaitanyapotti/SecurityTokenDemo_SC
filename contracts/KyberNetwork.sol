@@ -6,7 +6,6 @@ import "./KyberReserveInterface.sol";
 import "./KyberNetworkInterface.sol";
 import "./Withdrawable.sol";
 import "./Utils2.sol";
-import "./WhiteListInterface.sol";
 import "./ExpectedRateInterface.sol";
 import "./FeeBurnerInterface.sol";
 
@@ -18,7 +17,6 @@ contract KyberNetwork is Withdrawable, Utils2, KyberNetworkInterface {
     uint public negligibleRateDiff = 10; // basic rate steps will be in 0.01%
     KyberReserveInterface[] public reserves;
     mapping(address=>bool) public isReserve;
-    WhiteListInterface public whiteListContract;
     ExpectedRateInterface public expectedRateContract;
     FeeBurnerInterface    public feeBurnerContract;
     address               public kyberNetworkProxyContract;
@@ -150,11 +148,6 @@ contract KyberNetwork is Withdrawable, Utils2, KyberNetworkInterface {
         setDecimals(token);
     }
 
-    function setWhiteList(WhiteListInterface whiteList) public onlyAdmin {
-        require(whiteList != address(0));
-        whiteListContract = whiteList;
-    }
-
     function setExpectedRate(ExpectedRateInterface expectedRate) public onlyAdmin {
         require(expectedRate != address(0));
         expectedRateContract = expectedRate;
@@ -180,7 +173,6 @@ contract KyberNetwork is Withdrawable, Utils2, KyberNetworkInterface {
 
     function setEnable(bool _enable) public onlyAdmin {
         if (_enable) {
-            require(whiteListContract != address(0));
             require(feeBurnerContract != address(0));
             require(expectedRateContract != address(0));
             require(kyberNetworkProxyContract != address(0));
@@ -223,17 +215,6 @@ contract KyberNetwork is Withdrawable, Utils2, KyberNetworkInterface {
     {
         require(expectedRateContract != address(0));
         return expectedRateContract.getExpectedRate(src, dest, srcQty);
-    }
-
-    function getUserCapInWei(address user) public view returns(uint) {
-        return whiteListContract.getUserCapInWei(user);
-    }
-
-    function getUserCapInTokenWei(address user, ERC20 token) public view returns(uint) {
-        //future feature
-        user;
-        token;
-        require(false);
     }
 
     struct BestRateResult {
@@ -403,7 +384,6 @@ contract KyberNetwork is Withdrawable, Utils2, KyberNetworkInterface {
         }
 
         // verify trade size is smaller than user cap
-        require(weiAmount <= getUserCapInWei(tradeInput.trader));
 
         //do the trade
         //src to ETH
