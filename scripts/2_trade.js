@@ -5,9 +5,10 @@ const moment = require("moment");
 const increaseTime = require("./increaseTime");
 
 const OmiseGoToken = artifacts.require("./OmiseGo.sol");
+const ManaToken = artifacts.require("./Mana.sol");
 const NetworkProxy = artifacts.require("./KyberNetworkProxy.sol");
+const Network = artifacts.require("./KyberNetwork.sol");
 const Reserve = artifacts.require("./KyberReserve.sol");
-const AutomatedReserve = artifacts.require("./KyberAutomatedReserve.sol");
 
 function stdlog(input) {
   console.log(`${moment().format("YYYY-MM-DD HH:mm:ss.SSS")}] ${input}`);
@@ -36,12 +37,11 @@ module.exports = async callback => {
     const userWallet = accounts[4];
     const OMISEGOInstance = await OmiseGoToken.at(OmiseGoToken.address);
     const NetworkProxyInstance = await NetworkProxy.at(NetworkProxy.address);
-
+    const NetworkInstance = await Network.at(Network.address);
+    const ReserveInstance = await Reserve.at(Reserve.address);
+    console.log("Reserve Address: ", Reserve.address);
     const userDaiBalance = web3.utils.fromWei(await OMISEGOInstance.balanceOf(Reserve.address));
     console.log("User OMG balance: ", userDaiBalance, " OMG");
-
-    const userDai2Balance = web3.utils.fromWei(await OMISEGOInstance.balanceOf(AutomatedReserve.address));
-    console.log("User OMG balance: ", userDai2Balance, " OMG");
 
     // Approve the KyberNetwork contract to spend user's tokens
     ({ expectedRate, slippageRate } = await NetworkProxyInstance.getExpectedRate(
@@ -51,12 +51,23 @@ module.exports = async callback => {
     ));
     console.log("Received expected rate : ", web3.utils.fromWei(expectedRate));
 
-    const result = await NetworkProxyInstance.swapEtherToToken(
+    // Approve the KyberNetwork contract to spend user's tokens
+    ({ expectedRate, slippageRate } = await NetworkProxyInstance.getExpectedRate(
       OmiseGoToken.address, // destToken
-      expectedRate, // minConversionRate
-      { from: userWallet, value: web3.utils.toWei(new BN(1)) }
-    );
-    tx(result, "ETH <-> OMG swapEtherToToken()");
+      ETH_ADDRESS, // srcToken
+      web3.utils.toWei(new BN(100)) // srcQty
+    ));
+    console.log("Received expected rate : ", web3.utils.fromWei(expectedRate));
+
+    const result = await NetworkInstance.searchBestRate(ETH_ADDRESS, OmiseGoToken.address, web3.utils.toWei(new BN(0.01)));
+    console.log(result);
+
+    // const result = await NetworkProxyInstance.swapEtherToToken(
+    //   OmiseGoToken.address, // destToken
+    //   expectedRate, // minConversionRate
+    //   { from: userWallet, value: web3.utils.toWei(new BN(1)) }
+    // );
+    // tx(result, "ETH <-> OMG swapEtherToToken()");
 
     // for (let index = 0; index < 35; index++) {
     //   const result = await NetworkProxyInstance.swapTokenToEther(

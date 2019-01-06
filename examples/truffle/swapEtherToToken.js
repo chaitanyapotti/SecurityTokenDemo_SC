@@ -25,7 +25,7 @@ function tx(result, call) {
 }
 
 module.exports = async callback => {
-  const accounts = web3.eth.accounts._provider.addresses;
+  const accounts = await web3.eth.getAccounts();
   const userWallet = accounts[4];
   const ETH_ADDRESS = "0xeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeee";
   let expectedRate;

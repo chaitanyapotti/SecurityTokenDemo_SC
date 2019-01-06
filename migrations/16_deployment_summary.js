@@ -19,7 +19,6 @@ const Trade = artifacts.require("./examples/Trade.sol");
 
 const KNC = artifacts.require("./mockTokens/KyberNetworkCrystal.sol");
 const OMG = artifacts.require("./mockTokens/OmiseGo.sol");
-const SALT = artifacts.require("./mockTokens/Salt.sol");
 const MANA = artifacts.require("./mockTokens/Mana.sol");
 
 const networkConfig = JSON.parse(fs.readFileSync("../config/network.json", "utf8"));
