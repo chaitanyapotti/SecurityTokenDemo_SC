@@ -136,10 +136,10 @@ contract StandardToken is BasicToken, ERC20 {
 
 
 contract Mana is StandardToken, StandardBurnableToken {
-    string public name = "Mana";
-    string public symbol = "MANA";
+    string public name = "LaMond";
+    string public symbol = "LMD";
     uint8 public decimals = 18;
-    uint public totalSupply = 21 * (10 ** 24);
+    uint public totalSupply = 10 * (10 ** 24);
 
     constructor() public {
         balances[msg.sender] = totalSupply;

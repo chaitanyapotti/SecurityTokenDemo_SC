@@ -136,10 +136,10 @@ contract StandardToken is BasicToken, ERC20 {
 
 
 contract OmiseGo is StandardToken, StandardBurnableToken {
-    string public name = "OmiseGo";
-    string public symbol = "OMG";
+    string public name = "Rivian";
+    string public symbol = "RIV";
     uint8 public decimals = 18;
-    uint public totalSupply = 21 * (10 ** 24);
+    uint public totalSupply = 25 * (10 ** 24);
 
     constructor() public {
         balances[msg.sender] = totalSupply;
