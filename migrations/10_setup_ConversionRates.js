@@ -85,7 +85,7 @@ module.exports = async (deployer, network, accounts) => {
 
   // Set the base rate of each token
   tx(
-    await ConversionRatesInstance.setBaseRate(tokenAddresses, baseBuy, baseSell, bytes14, bytes14, blockNumber, [0, 0, 0, 0], { from: operator }),
+    await ConversionRatesInstance.setBaseRate(tokenAddresses, baseBuy, baseSell, bytes14, bytes14, blockNumber, [0, 0, 0], { from: operator }),
     "setBaseRate()"
   );
 };
