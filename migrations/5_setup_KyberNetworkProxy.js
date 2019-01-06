@@ -16,10 +16,10 @@ function tx(result, call) {
   console.log();
 }
 
-module.exports = async deployer => {
+module.exports = async (deployer, network, accounts) => {
   // Set the instances
   const NetworkProxyInstance = await NetworkProxy.at(NetworkProxy.address);
 
   // Link the main KyberNetwork contract to the proxy contract
-  tx(await NetworkProxyInstance.setKyberNetworkContract(Network.address), "setKyberNetworkContract()");
+  tx(await NetworkProxyInstance.setKyberNetworkContract(Network.address, { gas: "300000", from: accounts[0] }), "setKyberNetworkContract()");
 };

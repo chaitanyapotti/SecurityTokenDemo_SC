@@ -25,6 +25,8 @@ module.exports = async (deployer, network, accounts) => {
   const operator = accounts[1];
   const alerter = accounts[2];
 
+  console.log(alerter, "alerter");
+  console.log(operator, "operator");
   // Set the instances
   const NetworkInstance = await Network.at(Network.address);
   const ConversionRatesInstance = await ConversionRates.at(ConversionRates.address);
@@ -35,13 +37,13 @@ module.exports = async (deployer, network, accounts) => {
   const ExpectedRateInstance = await ExpectedRate.at(ExpectedRate.address);
 
   // Set permissions of contracts
-  tx(await NetworkInstance.addOperator(operator), "addOperator()");
-  tx(await ConversionRatesInstance.addOperator(operator), "addOperator()");
-  tx(await ReserveInstance.addOperator(operator), "addOperator()");
-  tx(await ReserveInstance.addAlerter(alerter), "addAlerter()");
+  tx(await NetworkInstance.addOperator(operator, { gas: "300000", from: accounts[0] }), "addOperator()");
+  tx(await ConversionRatesInstance.addOperator(operator, { gas: "300000", from: accounts[0] }), "addOperator()");
+  tx(await ReserveInstance.addOperator(operator, { gas: "300000", from: accounts[0] }), "addOperator()");
+  tx(await ReserveInstance.addAlerter(alerter, { gas: "300000", from: accounts[0] }), "addAlerter()");
   // tx(await AutomatedReserveInstance.addOperator(operator), "addOperator()");
   // tx(await AutomatedReserveInstance.addAlerter(alerter), "addAlerter()");
-  tx(await FeeBurnerInstance.addOperator(operator), "addOperator()");
-  tx(await ExpectedRateInstance.addOperator(operator), "addOperator()");
-  tx(await SanityRatesInstance.addOperator(operator), "addOperator()");
+  tx(await FeeBurnerInstance.addOperator(operator, { gas: "300000", from: accounts[0] }), "addOperator()");
+  tx(await ExpectedRateInstance.addOperator(operator, { gas: "300000", from: accounts[0] }), "addOperator()");
+  tx(await SanityRatesInstance.addOperator(operator, { gas: "300000", from: accounts[0] }), "addOperator()");
 };

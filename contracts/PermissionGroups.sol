@@ -94,6 +94,7 @@ contract PermissionGroups {
                 alertersGroup.length--;
                 emit AlerterAdded(alerter, false);
                 break;
+                
             }
         }
     }
@@ -101,8 +102,8 @@ contract PermissionGroups {
     event OperatorAdded(address newOperator, bool isAdd);
 
     function addOperator(address newOperator) public onlyAdmin {
-        require(!operators[newOperator]); // prevent duplicates.
-        require(operatorsGroup.length < MAX_GROUP_SIZE);
+        require(!operators[newOperator], "Already an operator"); // prevent duplicates.
+        require(operatorsGroup.length < MAX_GROUP_SIZE, "Max Size reached");
 
         emit OperatorAdded(newOperator, true);
         operators[newOperator] = true;
