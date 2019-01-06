@@ -8,6 +8,7 @@ const Reserve = artifacts.require("./KyberReserve.sol");
 
 const KNC = artifacts.require("./mockTokens/KyberNetworkCrystal.sol");
 const OMG = artifacts.require("./mockTokens/OmiseGo.sol");
+const SALT = artifacts.require("./mockTokens/Salt.sol");
 
 const networkConfig = JSON.parse(fs.readFileSync("../config/network.json", "utf8"));
 const tokenConfig = JSON.parse(fs.readFileSync("../config/tokens.json", "utf8"));
@@ -84,7 +85,7 @@ module.exports = async (deployer, network, accounts) => {
 
   // Set the base rate of each token
   tx(
-    await ConversionRatesInstance.setBaseRate(tokenAddresses, baseBuy, baseSell, bytes14, bytes14, blockNumber, [0, 0], { from: operator }),
+    await ConversionRatesInstance.setBaseRate(tokenAddresses, baseBuy, baseSell, bytes14, bytes14, blockNumber, [0, 0, 0], { from: operator }),
     "setBaseRate()"
   );
 };

@@ -4,7 +4,7 @@ const BN = require("bn.js");
 const moment = require("moment");
 const increaseTime = require("./increaseTime");
 
-const ManaToken = artifacts.require("./Mana.sol");
+const SaltToken = artifacts.require("./Salt.sol");
 const NetworkProxy = artifacts.require("./KyberNetworkProxy.sol");
 
 function stdlog(input) {
@@ -32,41 +32,46 @@ module.exports = async callback => {
     const ETH_ADDRESS = "0xeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeee";
     const accounts = await web3.eth.getAccounts();
     const userWallet = accounts[4];
-    const MANAInstance = await ManaToken.at(ManaToken.address);
+    const SaltInstance = await SaltToken.at(SaltToken.address);
     const NetworkProxyInstance = await NetworkProxy.at(NetworkProxy.address);
 
-    const userDaiBalance = web3.utils.fromWei(await MANAInstance.balanceOf(userWallet));
-    console.log("User MANA balance: ", userDaiBalance, " MANA");
+    const userDaiBalance = web3.utils.fromWei(await SaltInstance.balanceOf(userWallet));
+    console.log("User Salt balance: ", userDaiBalance, " Salt");
 
     // Approve the KyberNetwork contract to spend user's tokens
-    await MANAInstance.approve(NetworkProxy.address, web3.utils.toWei(new BN(100000)), { from: userWallet });
+    await SaltInstance.approve(NetworkProxy.address, web3.utils.toWei(new BN(100000)), { from: userWallet });
     ({ expectedRate, slippageRate } = await NetworkProxyInstance.getExpectedRate(
-      ManaToken.address, // srcToken
+      SaltToken.address, // srcToken
       ETH_ADDRESS, // destToken
       web3.utils.toWei(new BN(200)) // srcQty
     ));
     console.log("Received expected rate : ", web3.utils.fromWei(expectedRate));
 
     const result = await NetworkProxyInstance.swapTokenToEther(
-      ManaToken.address, // srcToken
+      SaltToken.address, // srcToken
       web3.utils.toWei(new BN(200)), // srcAmount
       expectedRate, // minConversionRate
       { from: userWallet }
     );
-    tx(result, "DAI <-> ETH swapTokenToEther()");
+    tx(result, "SALT <-> ETH swapTokenToEther()");
 
-    // for (let index = 0; index < 35; index++) {
-    //   const result = await NetworkProxyInstance.swapTokenToEther(
-    //     DaiToken.address, // srcToken
-    //     web3.utils.toWei(new BN(200)), // srcAmount
-    //     expectedRate, // minConversionRate
-    //     { from: userWallet }
-    //   );
-    //   tx(result, "DAI <-> ETH swapTokenToEther()");
-    // }
+    // Approve the KyberNetwork contract to spend user's tokens
+    ({ expectedRate, slippageRate } = await NetworkProxyInstance.getExpectedRate(
+      ETH_ADDRESS, // srcToken
+      SaltToken.address, // destToken
+      web3.utils.toWei(new BN(1)) // srcQty
+    ));
+    console.log("Received expected rate : ", web3.utils.fromWei(expectedRate));
 
-    const userDaiBalanceFinal = web3.utils.fromWei(await MANAInstance.balanceOf(userWallet));
-    console.log("User MANA balance: ", userDaiBalanceFinal, " MANA");
+    const result2 = await NetworkProxyInstance.swapEtherToToken(
+      SaltToken.address, // destToken
+      expectedRate, // minConversionRate
+      { from: userWallet, value: web3.utils.toWei(new BN(1)) }
+    );
+    tx(result2, "ETH <-> SALT swapEtherToToken()");
+
+    const userDaiBalanceFinal = web3.utils.fromWei(await SaltInstance.balanceOf(userWallet));
+    console.log("User Salt balance: ", userDaiBalanceFinal, " Salt");
 
     stdlog("- END -");
     callback();

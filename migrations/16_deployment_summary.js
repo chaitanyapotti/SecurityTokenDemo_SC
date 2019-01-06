@@ -5,21 +5,22 @@ const fs = require("fs");
 const Network = artifacts.require("./KyberNetwork.sol");
 const NetworkProxy = artifacts.require("./KyberNetworkProxy.sol");
 const ConversionRates = artifacts.require("./ConversionRates.sol");
-const LiquidityConversionRates = artifacts.require("./LiquidityConversionRates.sol");
+// const LiquidityConversionRates = artifacts.require("./LiquidityConversionRates.sol");
 const SanityRates = artifacts.require("./SanityRates.sol");
 const Reserve = artifacts.require("./KyberReserve.sol");
-const AutomatedReserve = artifacts.require("./KyberAutomatedReserve.sol");
+// const AutomatedReserve = artifacts.require("./KyberAutomatedReserve.sol");
 const FeeBurner = artifacts.require("./FeeBurner.sol");
 const ExpectedRate = artifacts.require("./ExpectedRate.sol");
 
-const SwapEtherToToken = artifacts.require("./examples/SwapEtherToToken.sol");
-const SwapTokenToEther = artifacts.require("./examples/SwapTokenToEther.sol");
-const SwapTokenToToken = artifacts.require("./examples/SwapTokenToToken.sol");
-const Trade = artifacts.require("./examples/Trade.sol");
+// const SwapEtherToToken = artifacts.require("./examples/SwapEtherToToken.sol");
+// const SwapTokenToEther = artifacts.require("./examples/SwapTokenToEther.sol");
+// const SwapTokenToToken = artifacts.require("./examples/SwapTokenToToken.sol");
+// const Trade = artifacts.require("./examples/Trade.sol");
 
 const KNC = artifacts.require("./mockTokens/KyberNetworkCrystal.sol");
 const OMG = artifacts.require("./mockTokens/OmiseGo.sol");
-const MANA = artifacts.require("./mockTokens/Mana.sol");
+const SALT = artifacts.require("./mockTokens/Salt.sol");
+// const MANA = artifacts.require("./mockTokens/Mana.sol");
 
 const networkConfig = JSON.parse(fs.readFileSync("../config/network.json", "utf8"));
 const tokenConfig = JSON.parse(fs.readFileSync("../config/tokens.json", "utf8"));
@@ -57,9 +58,9 @@ module.exports = (deployer, network, accounts) => {
   Object.keys(tokenConfig.Reserve).forEach(key => {
     console.log(`(${key}) ${eval(key).address}`);
   });
-  Object.keys(tokenConfig.AutomatedReserve).forEach(key => {
-    console.log(`(${key}) ${eval(key).address}`);
-  });
+  // Object.keys(tokenConfig.AutomatedReserve).forEach(key => {
+  //   console.log(`(${key}) ${eval(key).address}`);
+  // });
 
   console.log("\n");
 
@@ -68,14 +69,14 @@ module.exports = (deployer, network, accounts) => {
   console.log(`(KyberNetwork) ${Network.address}`);
   console.log(`(KyberNetworkProxy) ${NetworkProxy.address}`);
   console.log(`(ConversionRates) ${ConversionRates.address}`);
-  console.log(`(LiquidityConversionRates) ${LiquidityConversionRates.address}`);
+  // console.log(`(LiquidityConversionRates) ${LiquidityConversionRates.address}`);
   console.log(`(SanityRates) ${SanityRates.address}`);
   console.log(`(KyberReserve) ${Reserve.address}`);
-  console.log(`(AutomatedKyberReserve) ${AutomatedReserve.address}`);
+  // console.log(`(AutomatedKyberReserve) ${AutomatedReserve.address}`);
   console.log(`(FeeBurner) ${FeeBurner.address}`);
   console.log(`(ExpectedRate) ${ExpectedRate.address}`);
-  console.log(`(SwapEtherToToken) ${SwapEtherToToken.address}`);
-  console.log(`(SwapTokenToEther) ${SwapTokenToEther.address}`);
-  console.log(`(SwapTokenToToken) ${SwapTokenToToken.address}`);
-  console.log(`(Trade) ${Trade.address}`);
+  // console.log(`(SwapEtherToToken) ${SwapEtherToToken.address}`);
+  // console.log(`(SwapTokenToEther) ${SwapTokenToEther.address}`);
+  // console.log(`(SwapTokenToToken) ${SwapTokenToToken.address}`);
+  // console.log(`(Trade) ${Trade.address}`);
 };

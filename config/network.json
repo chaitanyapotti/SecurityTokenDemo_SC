@@ -15,15 +15,18 @@
   "SanityRates": {
     "reasonableDiff": 1000,
     "KNCSanityRate": 1840144285714286,
-    "OMGSanityRate": 17321646037735852
+    "OMGSanityRate": 72340993988000000,
+    "SALTSanityRate": 8400496994000000
   },
   "ConversionRates": {
     "validDurationBlock": 1000000000,
     "bytes14": "0x0000000000000000000000000000",
     "KNCBaseBuy": "549000000000000000000",
     "KNCBaseSell": "1813123931381047",
-    "OMGBaseBuy": "61079439106994400000",
-    "OMGBaseSell": "16400993988000000"
+    "OMGBaseBuy": "14215887821398880000",
+    "OMGBaseSell": "71340993988000000",
+    "SALTBaseBuy": "122158878213988800000",
+    "SALTBaseSell": "8250496994000000"
   },
   "feeSharingWallets": {
     "bob": {
