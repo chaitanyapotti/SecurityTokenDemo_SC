@@ -25,8 +25,9 @@ function tx(result, call) {
 
 module.exports = async (deployer, network, accounts) => {
   const admin = accounts[0];
-  const userWallet = accounts[4];
-  const userWallet2 = accounts[8];
+  const userWallet = accounts[3];
+  const userWallet2 = accounts[4];
+  const bd = accounts[9];
 
   // Set the instances
   const ReserveInstance = await Reserve.at(Reserve.address);
@@ -47,10 +48,20 @@ module.exports = async (deployer, network, accounts) => {
   tx(await SALTInstance.transfer(userWallet, SALTAmount), "transfer()");
   // tx(await MANAInstance.transfer(userWallet, MANAAmount), "transfer()");
 
+  // approve bd to spend tokens
+  tx(await KNCInstance.approve(bd, KNCAmount), "approve()", { from: userWallet });
+  tx(await OMGInstance.approve(bd, OMGAmount), "approve()", { from: userWallet });
+  tx(await SALTInstance.approve(bd, SALTAmount), "approve()", { from: userWallet });
+
   tx(await KNCInstance.transfer(userWallet2, KNCAmount), "transfer()");
   tx(await OMGInstance.transfer(userWallet2, OMGAmount), "transfer()");
   tx(await SALTInstance.transfer(userWallet2, SALTAmount), "transfer()");
   // tx(await MANAInstance.transfer(userWallet2, MANAAmount), "transfer()");
+
+  // approve bd to spend tokens
+  tx(await KNCInstance.approve(bd, KNCAmount), "approve()", { from: userWallet2 });
+  tx(await OMGInstance.approve(bd, OMGAmount), "approve()", { from: userWallet2 });
+  tx(await SALTInstance.approve(bd, SALTAmount), "approve()", { from: userWallet2 });
 
   // Transfer tokens and ETH to the reserve
   tx(await KNCInstance.transfer(Reserve.address, KNCAmount), "transfer()");
