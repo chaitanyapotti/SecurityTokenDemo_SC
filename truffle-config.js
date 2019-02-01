@@ -26,6 +26,7 @@ const HDWalletProvider = require("truffle-hdwallet-provider");
 const infuraKey = "dc22c9c6245742069d5fe663bfa8a698";
 //
 // const fs = require('fs');
+// only test ether present - use it at your own risk
 const mnemonic = "blue inherit drum enroll amused please camp false estate flash sell right";
 
 module.exports = {
