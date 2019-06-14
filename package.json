@@ -20,10 +20,20 @@
     "lint:js": "eslint test/**/*.js"
   },
   "lint-staged": {
-    "**/*.{js,json,css,md}": [
-      "prettier --write --print-width 150",
+    "*.js": [
+      "eslint --fix **/*.js",
+      "prettier --write",
+      "git add"
+    ],
+    "*.sol": [
+      "prettier --write **/*.sol",
       "git add"
     ]
+  },
+  "husky": {
+    "hooks": {
+      "pre-commit": "lint-staged"
+    }
   },
   "repository": {
     "type": "git",
