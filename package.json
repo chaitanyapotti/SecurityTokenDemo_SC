@@ -7,11 +7,15 @@
     "test": "test"
   },
   "scripts": {
-    "start:blockchain:client": "bash ./scripts/start-blockchain.sh",
-    "stop:blockchain:client": "bash ./scripts/stop-blockchain.sh",
-    "migrate": "npm run start:blockchain:client & truffle migrate --reset --all --network=development",
-    "test": "npm run start:blockchain:client & truffle compile --all && truffle test --network development",
-    "post-test": "npm run stop:blockchain:client",
+    "build": "truffle compile --all",
+    "start:blockchain:client": ". ./scripts/start-blockchain.sh",
+    "stop:blockchain:client": ". ./scripts/stop-blockchain.sh",
+    "pretest": "npm run start:blockchain:client",
+    "migrate": "npm run start:blockchain:client & truffle migrate --reset --compile-all --network development && npm run stop:blockchain:client",
+    "migrate:windows": "truffle migrate --reset --compile-all --network development",
+    "migrate:rinkeby": "truffle migrate --reset --compile-all --network rinkeby",
+    "test": "truffle compile --all && truffle test --network development",
+    "posttest": "npm run stop:blockchain:client",
     "coverage": "touch allFiredEvents & truffle compile --all & solidity-coverage",
     "precommit": "lint-staged && solhint \"contracts/*.sol\"",
     "prettier": "prettier --write \"**/*.{js,json,css,md}\"",
@@ -21,12 +25,16 @@
   },
   "lint-staged": {
     "*.js": [
-      "eslint --fix **/*.js",
-      "prettier --write",
+      "npm run lint:js --",
+      "prettier --write **/*.js",
       "git add"
     ],
     "*.sol": [
-      "prettier --write **/*.sol",
+      "npm run lint:sol --",
+      "git add"
+    ],
+    "*.{json,css}": [
+      "prettier --write **/*.json",
       "git add"
     ]
   },
@@ -47,22 +55,22 @@
   },
   "devDependencies": {
     "bn.js": "^4.11.8",
-    "eslint": "^5.16.0",
-    "eslint-config-prettier": "^4.3.0",
-    "eslint-config-standard": "^12.0.0",
-    "eslint-plugin-import": "^2.17.3",
-    "eslint-plugin-mocha": "^5.3.0",
+    "eslint": "^6.1.0",
+    "eslint-config-prettier": "^6.0.0",
+    "eslint-config-standard": "^13.0.1",
+    "eslint-plugin-import": "^2.18.2",
+    "eslint-plugin-mocha": "^6.0.0",
     "eslint-plugin-node": "^9.1.0",
-    "eslint-plugin-prettier": "^3.0.1",
-    "eslint-plugin-promise": "^4.1.1",
+    "eslint-plugin-prettier": "^3.1.0",
+    "eslint-plugin-promise": "^4.2.1",
     "eslint-plugin-standard": "^4.0.0",
-    "husky": "^2.4.1",
-    "lint-staged": "^8.2.1",
+    "husky": "^3.0.2",
+    "lint-staged": "^9.2.1",
     "moment": "^2.24.0",
     "prettier": "^1.18.2",
-    "solhint": "^2.1.0",
-    "truffle": "^5.0.22",
-    "truffle-hdwallet-provider": "1.0.10"
+    "solhint": "^2.1.2",
+    "truffle": "^5.0.30",
+    "truffle-hdwallet-provider": "1.0.15"
   },
   "bugs": {
     "url": "https://github.com/chaitanyapotti/SecurityTokenDemo_SC/issues"
